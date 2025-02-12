@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Data;
 
-public partial class MedicineV01Context : DbContext
+public partial class ApplicationDbContext : DbContext
 {
-    public MedicineV01Context()
+    public ApplicationDbContext()
     {
     }
 
-    public MedicineV01Context(DbContextOptions<MedicineV01Context> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
@@ -22,9 +22,7 @@ public partial class MedicineV01Context : DbContext
 
     public virtual DbSet<Patient> Patients { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=AHMED\\SQLEXPRESS;Initial Catalog=MedicineV01;Integrated Security=True");
-
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Location>(entity =>
@@ -45,9 +43,9 @@ public partial class MedicineV01Context : DbContext
 
             entity.ToTable("Patient");
 
-            entity.HasIndex(e => e.Email, "UQ__Patient").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Patient_Email").IsUnique();
 
-            entity.HasIndex(e => e.UserName, "UQ__Patient").IsUnique();
+            entity.HasIndex(e => e.UserName, "UQ__Patient_UserName").IsUnique();
 
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.FirstName).HasMaxLength(100);

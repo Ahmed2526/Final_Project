@@ -1,3 +1,6 @@
+using DAL.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Final_Project
 {
     public class Program
@@ -7,6 +10,13 @@ namespace Final_Project
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            // Get connection string from configuration
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            // Register DbContext with DI
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
