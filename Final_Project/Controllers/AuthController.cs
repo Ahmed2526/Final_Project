@@ -21,6 +21,7 @@ namespace Final_Project.Controllers
         [Route("User/SignUp")]
         public async Task<IActionResult> Register([FromBody] UserRegister userCredentials)
         {
+
             var result = await _patientService.Register(userCredentials);
 
             if (result.IsSuccess)

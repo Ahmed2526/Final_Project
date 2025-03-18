@@ -45,11 +45,11 @@ namespace Final_Project.Service
             var user = new Doctor()
             {
                 FirstName = docCredentials.FirstName,
-                LastName=docCredentials.LastName,
+                LastName = docCredentials.LastName,
                 Email = docCredentials.Email,
                 Phone = docCredentials.Phone,
                 Password = docCredentials.Password,
-                SpecialityId=docCredentials.SpecialityId
+                SpecialityId = docCredentials.SpecialityId
             };
 
             await _context.AddAsync(user);

@@ -1,4 +1,5 @@
 ﻿using DAL.Data;
+using Final_Project.Errors;
 using Final_Project.IService;
 using Final_Project.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -63,19 +64,23 @@ namespace Final_Project
             });
 
 
-
             //Custom Services
             builder.Services.AddScoped<IPatientService, PatientService>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
 
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //if (app.Environment.IsDevelopment())
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+            app.UseExceptionHandler();
 
             app.UseHttpsRedirection();
 

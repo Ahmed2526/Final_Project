@@ -30,7 +30,7 @@ namespace Final_Project.Service
 
             if (userExist)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.EmailExist });
-    
+
             var userExist01 = await _context.Patients
                 .AnyAsync(u => u.Phone == userCredentials.Phone);
 
