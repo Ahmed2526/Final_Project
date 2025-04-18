@@ -90,7 +90,8 @@ namespace Final_Project.Service
             {
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(ClaimTypes.Name, user.FirstName+" "+user.LastName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
         };
 
             var token = new JwtSecurityToken(

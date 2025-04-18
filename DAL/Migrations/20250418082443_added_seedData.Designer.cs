@@ -4,6 +4,7 @@ using DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418082443_added_seedData")]
+    partial class added_seedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,9 +346,6 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("About")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -370,9 +370,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
-
-                    b.Property<double?>("Rate")
-                        .HasColumnType("float");
 
                     b.Property<int>("SpecialityId")
                         .HasColumnType("int");
@@ -641,137 +638,137 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "أخصائي حساسية/مناعة"
+                            Name = "Allergist/Immunologist"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "أخصائي تخدير"
+                            Name = "Anesthesiologist"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "أخصائي قلب"
+                            Name = "Cardiologist"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "أخصائي جلدية"
+                            Name = "Dermatologist"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "أخصائي غدد صماء"
+                            Name = "Endocrinologist"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "أخصائي جهاز هضمي"
+                            Name = "Gastroenterologist"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "طبيب عام"
+                            Name = "General Practitioner"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "أخصائي طب كبار السن"
+                            Name = "Geriatrician"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "أخصائي دم"
+                            Name = "Hematologist"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "أخصائي أمراض معدية"
+                            Name = "Infectious Disease Specialist"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "طبيب باطنية"
+                            Name = "Internist"
                         },
                         new
                         {
                             Id = 12,
-                            Name = "أخصائي كلى"
+                            Name = "Nephrologist"
                         },
                         new
                         {
                             Id = 13,
-                            Name = "أخصائي أعصاب"
+                            Name = "Neurologist"
                         },
                         new
                         {
                             Id = 14,
-                            Name = "أخصائي نساء وتوليد"
+                            Name = "Obstetrician/Gynecologist (OB/GYN)"
                         },
                         new
                         {
                             Id = 15,
-                            Name = "أخصائي أورام"
+                            Name = "Oncologist"
                         },
                         new
                         {
                             Id = 16,
-                            Name = "أخصائي عيون"
+                            Name = "Ophthalmologist"
                         },
                         new
                         {
                             Id = 17,
-                            Name = "جراح عظام"
+                            Name = "Orthopedic Surgeon"
                         },
                         new
                         {
                             Id = 18,
-                            Name = "أخصائي أنف وأذن وحنجرة"
+                            Name = "Otolaryngologist (ENT)"
                         },
                         new
                         {
                             Id = 19,
-                            Name = "أخصائي أمراض"
+                            Name = "Pathologist"
                         },
                         new
                         {
                             Id = 20,
-                            Name = "أخصائي أطفال"
+                            Name = "Pediatrician"
                         },
                         new
                         {
                             Id = 21,
-                            Name = "جراح تجميل"
+                            Name = "Plastic Surgeon"
                         },
                         new
                         {
                             Id = 22,
-                            Name = "أخصائي نفسية"
+                            Name = "Psychiatrist"
                         },
                         new
                         {
                             Id = 23,
-                            Name = "أخصائي صدر"
+                            Name = "Pulmonologist"
                         },
                         new
                         {
                             Id = 24,
-                            Name = "أخصائي أشعة"
+                            Name = "Radiologist"
                         },
                         new
                         {
                             Id = 25,
-                            Name = "أخصائي روماتيزم"
+                            Name = "Rheumatologist"
                         },
                         new
                         {
                             Id = 26,
-                            Name = "جراح عام"
+                            Name = "Surgeon (General)"
                         },
                         new
                         {
                             Id = 27,
-                            Name = "أخصائي مسالك بولية"
+                            Name = "Urologist"
                         });
                 });
 

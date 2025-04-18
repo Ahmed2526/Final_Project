@@ -1,8 +1,6 @@
 ﻿using Final_Project.DTO;
 using Final_Project.IService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Final_Project.Controllers
 {
@@ -20,7 +18,7 @@ namespace Final_Project.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result =await _specialityService.GetAll();
+            var result = await _specialityService.GetAll();
 
             if (result.IsSuccess)
                 return Ok(result);
@@ -31,7 +29,7 @@ namespace Final_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(SpecialityRequest request)
         {
-            var result =await _specialityService.Create(request);
+            var result = await _specialityService.Create(request);
 
             if (result.IsSuccess)
                 return Ok(result);

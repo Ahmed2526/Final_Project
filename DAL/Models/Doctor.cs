@@ -8,6 +8,8 @@
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
+        public double? Rate { get; set; }
+        public string? About { get; set; }
 
         public int SpecialityId { get; set; } // Foreign Key
         public Speciality Speciality { get; set; }

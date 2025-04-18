@@ -26,7 +26,7 @@ namespace Final_Project.Errors
             };
 
             await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
-            return true; 
+            return true;
         }
 
     }
