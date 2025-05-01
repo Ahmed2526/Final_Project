@@ -10,8 +10,12 @@
         public string Password { get; set; }
         public double? Rate { get; set; }
         public string? About { get; set; }
+        public string? ProfilePic { get; set; }
+
 
         public int SpecialityId { get; set; } // Foreign Key
         public Speciality Speciality { get; set; }
+
+        public ICollection<DoctorAvailability> Availabilities { get; set; }
     }
 }

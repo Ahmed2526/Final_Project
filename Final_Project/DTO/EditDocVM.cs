@@ -4,26 +4,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Final_Project.DTO
 {
-    public class DocVM
+    public class EditDocVM
     {
-        [MinLength(3)]
         [MaxLength(50)]
         public string? FirstName { get; set; }
 
-        [MinLength(3)]
         [MaxLength(50)]
         public string? LastName { get; set; }
-
-        [EmailAddress]
-        [MaxLength(100)]
-        public string? Email { get; set; }
 
         [RegularExpression(RegexPatterns.EgyPhonePattern, ErrorMessage = RegexErrors.PhonePattern)]
         public string? Phone { get; set; }
 
-        [MinLength(3)]
+        [MaxLength(500)]
         public string? About { get; set; }
-        public double? Rate { get; set; }
-        public string? ProfilePic { get; set; }
+
+        public IFormFile? ProfilePic { get; set; }
     }
 }

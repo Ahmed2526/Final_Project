@@ -7,7 +7,9 @@
         public string LastName { get; set; }
         public double? Rate { get; set; }
         public string? About { get; set; }
+        public string? ProfilePic { get; set; }
 
         public string Speciality { get; set; }
+
     }
 }

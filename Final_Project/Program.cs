@@ -63,11 +63,11 @@ namespace Final_Project
                 });
             });
 
-
             //Custom Services
             builder.Services.AddScoped<IPatientService, PatientService>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<ISpecialityService, SpecialityService>();
+            builder.Services.AddScoped<IFileService, FileService>();
 
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
@@ -80,6 +80,8 @@ namespace Final_Project
 
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            app.UseStaticFiles();
 
             app.UseExceptionHandler();
 

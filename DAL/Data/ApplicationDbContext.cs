@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext
     {
 
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
@@ -28,5 +29,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<City> Cities { get; set; }
     public DbSet<Clinic> Clinics { get; set; }
     public DbSet<Location> Locations { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<DoctorAvailability> DoctorAvailabilities { get; set; }
 
 }

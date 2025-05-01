@@ -1,23 +1,28 @@
 ﻿using DAL.Data;
 using DAL.Models;
 using Final_Project.DTO;
+using Final_Project.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Final_Project.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Doctor")]
     public class DoctorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileService _fileService;
 
-        public DoctorsController(ApplicationDbContext context)
+        public DoctorsController(ApplicationDbContext context, IFileService fileService)
         {
             _context = context;
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -29,6 +34,9 @@ namespace Final_Project.Controllers
 
             var doc = await _context.Doctors.FindAsync(userId);
 
+            if (doc is null)
+                return NotFound();
+
             var docvm = new DocVM()
             {
                 FirstName = doc.FirstName,
@@ -36,31 +44,53 @@ namespace Final_Project.Controllers
                 Email = doc.Email,
                 Phone = doc.Phone,
                 About = doc.About,
-                Rate = doc.Rate
+                Rate = doc.Rate,
+                ProfilePic=doc.ProfilePic
             };
 
             return Ok(docvm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditDoctor(DocVM docvm)
+        public async Task<IActionResult> EditDoctorProfile(EditDocVM docvm)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!int.TryParse(userIdClaim, out int userId))
                 return Unauthorized();
 
             var doc = await _context.Doctors.FindAsync(userId);
+            if (doc is null)
+                return NotFound();
 
-            doc.FirstName = docvm.FirstName;
-            doc.LastName = docvm.LastName;
-            doc.Phone = docvm.Phone;
-            doc.About = docvm.About;
+            if (!string.IsNullOrEmpty(docvm.FirstName))
+                doc.FirstName = docvm.FirstName;
+
+            if (!string.IsNullOrEmpty(docvm.LastName))
+                doc.LastName = docvm.LastName;
+
+            if (!string.IsNullOrEmpty(docvm.Phone))
+                doc.Phone = docvm.Phone;
+
+            if (!string.IsNullOrEmpty(docvm.About))
+                doc.About = docvm.About;
+
+            //Handle Profile Pic
+            if (docvm.ProfilePic is not null && docvm.ProfilePic.Length > 0)
+            {
+                var (status, message, path) = await _fileService.HandleDocProfilePhoto(docvm.ProfilePic, doc.ProfilePic);
+
+                if (!status)
+                    return BadRequest(message);
+
+                doc.ProfilePic = path;
+            }
 
             _context.Update(doc);
             _context.SaveChanges();
 
-            return NoContent();
+            return Ok(doc.ProfilePic);
         }
+
 
         [HttpPost]
         [Route("AddClinic")]
@@ -82,6 +112,8 @@ namespace Final_Project.Controllers
             await _context.SaveChangesAsync();
 
             var doctor = await _context.Doctors.FindAsync(userId);
+            if (doctor is null)
+                return NotFound();
 
             var clinic = new Clinic()
             {
@@ -115,6 +147,9 @@ namespace Final_Project.Controllers
                 .ThenInclude(e => e.City)
                 .ToListAsync();
 
+            if (clinics is null)
+                return NotFound();
+
             var response = clinics.Select(e => new ClinicResponse()
             {
                 Id = e.Id,
@@ -127,12 +162,11 @@ namespace Final_Project.Controllers
             return Ok(response);
         }
 
-
         [HttpGet]
         [Route(template: "GetGovernates")]
         public async Task<IActionResult> GetGovernates()
         {
-            var govs = _context.Governates.AsNoTracking().ToList();
+            var govs = await _context.Governates.AsNoTracking().ToListAsync();
             return Ok(govs);
         }
 
@@ -140,12 +174,15 @@ namespace Final_Project.Controllers
         [Route(template: "GetAreas")]
         public async Task<IActionResult> GetAreas(int govId)
         {
-            var Areas = _context.Cities.Where(e => e.GovernateId == govId).ToList();
+            var Areas = await _context.Cities.Where(e => e.GovernateId == govId).ToListAsync();
+            if (Areas is null)
+                return NotFound();
 
             var areaResponse = Areas.Select(a => new AreaResponse() { Id = a.Id, Name = a.Name });
 
             return Ok(areaResponse);
         }
+
 
 
     }
