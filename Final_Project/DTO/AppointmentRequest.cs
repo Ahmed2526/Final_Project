@@ -1,5 +1,4 @@
 ﻿using Final_Project.Custom_Validations;
-using System.ComponentModel.DataAnnotations;
 
 namespace Final_Project.DTO
 {

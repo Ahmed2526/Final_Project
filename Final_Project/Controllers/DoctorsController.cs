@@ -5,9 +5,7 @@ using Final_Project.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Final_Project.Controllers
 {
@@ -45,7 +43,7 @@ namespace Final_Project.Controllers
                 Phone = doc.Phone,
                 About = doc.About,
                 Rate = doc.Rate,
-                ProfilePic=doc.ProfilePic
+                ProfilePic = doc.ProfilePic
             };
 
             return Ok(docvm);
@@ -88,9 +86,8 @@ namespace Final_Project.Controllers
             _context.Update(doc);
             _context.SaveChanges();
 
-            return Ok(doc.ProfilePic);
+            return Ok();
         }
-
 
         [HttpPost]
         [Route("AddClinic")]
@@ -113,7 +110,7 @@ namespace Final_Project.Controllers
 
             var doctor = await _context.Doctors.FindAsync(userId);
             if (doctor is null)
-                return NotFound();
+                return BadRequest("Invalid User");
 
             var clinic = new Clinic()
             {
@@ -160,6 +157,25 @@ namespace Final_Project.Controllers
             });
 
             return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route(template: "DeleteClinic")]
+        public async Task<IActionResult> DeleteClinic(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var clinic = await _context.Clinics.FindAsync(id);
+
+            if (clinic is null || clinic.DoctorId != userId)
+                return BadRequest();
+
+            _context.Clinics.Remove(clinic);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpGet]

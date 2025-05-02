@@ -12,6 +12,7 @@
         public string? About { get; set; }
         public string? ProfilePic { get; set; }
 
+        public ICollection<Clinic> Clinics { get; set; }
 
         public int SpecialityId { get; set; } // Foreign Key
         public Speciality Speciality { get; set; }

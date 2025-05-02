@@ -4,6 +4,7 @@ using DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250501225732_ModifiedChedule")]
+    partial class ModifiedChedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Appointments", (string)null);
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("DAL.Models.City", b =>
@@ -81,7 +84,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("GovernateId");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
 
                     b.HasData(
                         new
@@ -374,7 +377,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("SpecialityId");
 
-                    b.ToTable("Clinics", (string)null);
+                    b.ToTable("Clinics");
                 });
 
             modelBuilder.Entity("DAL.Models.Doctor", b =>
@@ -465,7 +468,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorAvailabilities", (string)null);
+                    b.ToTable("DoctorAvailabilities");
                 });
 
             modelBuilder.Entity("DAL.Models.Governate", b =>
@@ -482,7 +485,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Governates", (string)null);
+                    b.ToTable("Governates");
 
                     b.HasData(
                         new
@@ -650,7 +653,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("GovernateId");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("DAL.Models.Patient", b =>

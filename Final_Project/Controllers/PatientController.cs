@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Final_Project.Controllers
 {
@@ -126,7 +127,47 @@ namespace Final_Project.Controllers
             return Ok(docsvm);
         }
 
-        //Enhance
+        [HttpGet]
+        [Route("GetDoctorSchedule")]
+        public async Task<IActionResult> GetDoctorSchedule(int Id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var doc = _context.Doctors
+                .Include(e => e.Availabilities)
+                .Include(e => e.Clinics)
+                .ThenInclude(e => e.Location)
+                .ThenInclude(e => e.Governate)
+                .Include(e => e.Clinics)
+                .ThenInclude(c => c.Location)
+                .ThenInclude(l => l.City)
+                .FirstOrDefault(e => e.Id == Id);
+
+            if (doc is null)
+                return NotFound();
+
+            var data = doc.Availabilities.Select(e => new DocAvailResponse()
+            {
+                DocId = e.DoctorId,
+                ClinicId = e.Clinic.Id,
+                Doctor = e.Doctor.FirstName + " " + e.Doctor.LastName,
+                Clinic = e.Clinic.Name,
+                Governate = e.Clinic.Location.Governate!.Name,
+                City = e.Clinic.Location.City!.Name,
+                Phone = e.Clinic.Phone,
+                Price = e.Clinic.Price,
+                Street = e.Clinic.Location.Street,
+                Day = e.Day,
+                AppointmentStart = e.AppointmentStart,
+                AppointmentEnd = e.AppointmentEnd
+            }).ToList();
+
+            return Ok(data);
+        }
+
+
         [HttpPost]
         [Route("BookAppointment")]
         public async Task<IActionResult> Book(AppointmentRequest request)
@@ -136,11 +177,11 @@ namespace Final_Project.Controllers
                 return Unauthorized();
 
             var checkclinic = await _context.Clinics
-                .Where(e => e.DoctorId == request.DoctorId)
+                .Where(e => e.DoctorId == request.DoctorId && e.Id == request.ClinicId)
                 .ToListAsync();
 
-            if (checkclinic is null)
-                return BadRequest();
+            if (checkclinic is null || checkclinic.Count < 1)
+                return BadRequest("Invalid Request");
 
             var appointment = new Appointment()
             {
@@ -171,9 +212,14 @@ namespace Final_Project.Controllers
                 .Where(e => e.PatientId == userId && e.Status != AppointmentStatus.Completed)
                 .Include(e => e.Doctor)
                 .Include(e => e.Clinic)
+                .ThenInclude(e => e.Location)
+                .ThenInclude(e => e.Governate)
+                .Include(e => e.Clinic)
+                .ThenInclude(e => e.Location)
+                .ThenInclude(e => e.City)
                 .ToListAsync();
 
-            if (appointments is null)
+            if (appointments is null || appointments.Count < 1)
                 return NotFound();
 
             var appResponse = appointments.Select(e => new AppointmentResponse()
@@ -181,16 +227,19 @@ namespace Final_Project.Controllers
                 Id = e.Id,
                 Doctor = e.Doctor.FirstName + " " + e.Doctor.LastName,
                 Clinic = e.Clinic.Name,
+                Governorate = e.Clinic.Location.Governate!.Name,
+                City = e.Clinic.Location.City!.Name,
+                Street = e.Clinic.Location.Street,
                 Day = e.Day,
                 AppointmentStart = e.AppointmentStart,
                 AppointmentEnd = e.AppointmentEnd
-            });
+            }).ToList();
 
             return Ok(appResponse);
         }
 
 
-        [HttpPost]
+        [HttpDelete]
         [Route("CancelAppointment")]
         public async Task<IActionResult> DeleteAppointment(int appId)
         {

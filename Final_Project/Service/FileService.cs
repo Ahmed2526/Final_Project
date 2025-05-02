@@ -20,18 +20,20 @@ namespace Final_Project.Service
             if (!permittedExtensions.Contains(extension))
                 return (false, "Invalid file type.", null);
 
-            var oldFullPath = Path.Combine(_env.WebRootPath ?? "wwwroot", OldPath.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString()));
-
-            // Delete old file if path is provided and file exists
-            if (System.IO.File.Exists(oldFullPath))
+            if (OldPath is not null)
             {
-                try
+                var oldFullPath = Path.Combine(_env.WebRootPath ?? "wwwroot", OldPath.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString()));
+                // Delete old file if path is provided and file exists
+                if (System.IO.File.Exists(oldFullPath))
                 {
-                    System.IO.File.Delete(oldFullPath);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to delete old photo.");
+                    try
+                    {
+                        System.IO.File.Delete(oldFullPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to delete old photo.");
+                    }
                 }
             }
 

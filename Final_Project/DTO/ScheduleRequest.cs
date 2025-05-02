@@ -11,5 +11,7 @@ namespace Final_Project.DTO
 
         [TimeRangeValidation(nameof(AppointmentStart))]
         public string AppointmentEnd { get; set; }
+
+        public int ClinicId { get; set; }
     }
 }

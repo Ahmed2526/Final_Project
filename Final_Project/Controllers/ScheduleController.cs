@@ -19,7 +19,7 @@ namespace Final_Project.Controllers
         {
             _context = context;
         }
-        
+
         [HttpPost]
         [Route(template: "CreateSchedule")]
         public async Task<IActionResult> Create(ScheduleRequest request)
@@ -28,12 +28,17 @@ namespace Final_Project.Controllers
             if (!int.TryParse(userIdClaim, out int userId))
                 return Unauthorized();
 
+            var checkClinic = await _context.Clinics.FindAsync(request.ClinicId);
+            if (checkClinic is null || checkClinic.DoctorId != userId)
+                return BadRequest("Invalid Clinic");
+
             var data = new DoctorAvailability()
             {
                 DoctorId = userId,
                 Day = request.Day,
                 AppointmentStart = TimeOnly.Parse(request.AppointmentStart),
-                AppointmentEnd = TimeOnly.Parse(request.AppointmentEnd)
+                AppointmentEnd = TimeOnly.Parse(request.AppointmentEnd),
+                ClinicId = request.ClinicId
             };
 
             await _context.AddAsync(data);
@@ -41,7 +46,7 @@ namespace Final_Project.Controllers
 
             return Ok();
         }
-        
+
         [HttpGet]
         [Route(template: "GetSchedule")]
         public async Task<IActionResult> Get()
@@ -52,6 +57,7 @@ namespace Final_Project.Controllers
 
             var data = await _context.DoctorAvailabilities
                 .Where(e => e.DoctorId == userId)
+                .Include(e => e.Clinic)
                 .ToListAsync();
 
             if (data is null)
@@ -62,7 +68,8 @@ namespace Final_Project.Controllers
                 Id = e.Id,
                 Day = e.Day,
                 AppointmentStart = e.AppointmentStart,
-                AppointmentEnd = e.AppointmentEnd
+                AppointmentEnd = e.AppointmentEnd,
+                Clinic = e.Clinic.Name
             });
 
             return Ok(response);
@@ -82,18 +89,23 @@ namespace Final_Project.Controllers
                 return NotFound();
 
             if (data.DoctorId != userId)
-                return BadRequest();
+                return BadRequest("Invalid User");
+
+            var checkClinic = await _context.Clinics.FindAsync(request.ClinicId);
+            if (checkClinic is null || checkClinic.DoctorId != userId)
+                return BadRequest("Invalid Clinic");
 
             data.Day = request.Day;
             data.AppointmentStart = TimeOnly.Parse(request.AppointmentStart);
             data.AppointmentEnd = TimeOnly.Parse(request.AppointmentEnd);
+            data.ClinicId = request.ClinicId;
 
             _context.Update(data);
             await _context.SaveChangesAsync();
 
             return Ok();
         }
-       
+
         [HttpPost]
         [Route(template: "DeleteSchedule")]
         public async Task<IActionResult> Delete(int id)
