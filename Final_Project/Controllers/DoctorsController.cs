@@ -60,6 +60,14 @@ namespace Final_Project.Controllers
             if (doc is null)
                 return NotFound();
 
+            var PhoneExist = await _context.Doctors
+                .Where(e => e.Phone == docvm.Phone && e.Id != userId)
+                .FirstOrDefaultAsync();
+
+            if (PhoneExist is not null)
+                return BadRequest("Phone Already Registered");
+
+
             if (!string.IsNullOrEmpty(docvm.FirstName))
                 doc.FirstName = docvm.FirstName;
 
@@ -127,6 +135,52 @@ namespace Final_Project.Controllers
 
             return Created();
 
+        }
+
+
+        //Enhance Governorate and city
+        [HttpPost]
+        [Route("EditClinic")]
+        public async Task<IActionResult> EditClinic(EditClinic cln)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var clinic = await _context.Clinics
+                .Include(e => e.Location)
+                .FirstOrDefaultAsync(e => e.Id == cln.Id);
+
+            if (clinic is null || clinic.DoctorId != userId)
+                return BadRequest("Invalid Data");
+
+            if (cln.Name is not null)
+                clinic.Name = cln.Name;
+
+            if (cln.Phone is not null)
+                clinic.Phone = cln.Phone;
+
+            if (cln.Price > 0)
+                clinic.Price = cln.Price;
+
+            if (cln.Street is not null)
+                clinic.Location.Street = cln.Street;
+
+            var chkgov = await _context.Governates.FindAsync(cln.GovernateId);
+            if (chkgov is not null)
+                clinic.Location.GovernateId = cln.GovernateId;
+
+            var chkCity = await _context.Cities
+                .Where(e => e.Id == cln.CityId && e.GovernateId == cln.GovernateId)
+                .FirstOrDefaultAsync();
+
+            if (chkCity is not null)
+                clinic.Location.CityId = cln.CityId;
+
+            _context.Update(clinic);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpGet]

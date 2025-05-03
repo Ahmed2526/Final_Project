@@ -128,5 +128,38 @@ namespace Final_Project.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route(template: "GetAppointments")]
+        public async Task<IActionResult> GetApp()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var today = DateOnly.FromDateTime(DateTime.Today);
+
+            var apps = await _context.Appointments
+                .Where(e => e.DoctorId == userId && e.Day >= today)
+                .Include(e => e.Patient)
+                .Include(e => e.Clinic)
+                .ToListAsync();
+
+            if (apps is null || apps.Count < 1)
+                return NotFound();
+
+            var data = apps.Select(e => new DocSchedule()
+            {
+                Patient = e.Patient.Name,
+                Clinic = e.Clinic.Name,
+                Day = e.Day,
+                AppointmentStart = e.AppointmentStart,
+                AppointmentEnd = e.AppointmentEnd
+            });
+
+            return Ok(data);
+        }
+
+
+
     }
 }
