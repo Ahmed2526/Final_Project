@@ -19,6 +19,9 @@ namespace DAL.Models
         public TimeOnly AppointmentStart { get; set; }
         public TimeOnly AppointmentEnd { get; set; }
         public AppointmentStatus Status { get; set; }
+        public decimal? Price { get; set; }
+
+
 
     }
 }

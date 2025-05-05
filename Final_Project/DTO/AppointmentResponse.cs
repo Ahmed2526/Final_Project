@@ -1,4 +1,6 @@
-﻿namespace Final_Project.DTO
+﻿using DAL.Enums;
+
+namespace Final_Project.DTO
 {
     public class AppointmentResponse
     {
@@ -11,5 +13,6 @@
         public DateOnly Day { get; set; }
         public TimeOnly AppointmentStart { get; set; }
         public TimeOnly AppointmentEnd { get; set; }
+        public string Status { get; set; }
     }
 }

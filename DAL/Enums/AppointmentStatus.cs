@@ -3,8 +3,8 @@
     public enum AppointmentStatus
     {
         bending = 0,
-        confirmed = 1,
-        Completed = 2,
+        Paid = 1,
+        Done = 2,
         canceled = 3
     }
 }

@@ -178,9 +178,9 @@ namespace Final_Project.Controllers
 
             var checkclinic = await _context.Clinics
                 .Where(e => e.DoctorId == request.DoctorId && e.Id == request.ClinicId)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
 
-            if (checkclinic is null || checkclinic.Count < 1)
+            if (checkclinic is null)
                 return BadRequest("Invalid Request");
 
             var appointment = new Appointment()
@@ -191,7 +191,8 @@ namespace Final_Project.Controllers
                 Day = request.Day,
                 AppointmentStart = TimeOnly.Parse(request.AppointmentStart),
                 AppointmentEnd = TimeOnly.Parse(request.AppointmentEnd),
-                Status = AppointmentStatus.bending
+                Status = AppointmentStatus.bending,
+                Price = checkclinic.Price
             };
 
             await _context.AddAsync(appointment);
@@ -208,8 +209,11 @@ namespace Final_Project.Controllers
             if (!int.TryParse(userIdClaim, out int userId))
                 return Unauthorized();
 
+
+            var today = DateOnly.FromDateTime(DateTime.Today);
+
             var appointments = await _context.Appointments
-                .Where(e => e.PatientId == userId && e.Status != AppointmentStatus.Completed)
+                .Where(e => e.PatientId == userId && e.Status != AppointmentStatus.Done && e.Day >= today)
                 .Include(e => e.Doctor)
                 .Include(e => e.Clinic)
                 .ThenInclude(e => e.Location)
@@ -232,7 +236,8 @@ namespace Final_Project.Controllers
                 Street = e.Clinic.Location.Street,
                 Day = e.Day,
                 AppointmentStart = e.AppointmentStart,
-                AppointmentEnd = e.AppointmentEnd
+                AppointmentEnd = e.AppointmentEnd,
+                Status = e.Status.ToString()
             }).ToList();
 
             return Ok(appResponse);

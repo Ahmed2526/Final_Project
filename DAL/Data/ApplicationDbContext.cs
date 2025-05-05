@@ -32,6 +32,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<DoctorAvailability> DoctorAvailabilities { get; set; }
     public DbSet<PasswordResetToken> passwordResetTokens { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+
 
 
 }
