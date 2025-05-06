@@ -37,14 +37,17 @@ namespace Final_Project.Service
             if (userExist01)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.PhoneExist });
 
+            string hashed = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
+
             var user = new Patient()
             {
                 Name = userCredentials.Name,
                 Email = userCredentials.Email,
                 BirthDate = userCredentials.BirthDate,
                 Phone = userCredentials.Phone,
-                Password = userCredentials.Password
+                Password = hashed
             };
+
 
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -58,11 +61,17 @@ namespace Final_Project.Service
             return Result<UserResponse>.Success(StatusCodes.Status200OK, response);
 
         }
+
         public async Task<Result<UserResponse>> Login(UserLogin userCredentials)
         {
             var User = await _context.Patients.FirstOrDefaultAsync(e => e.Email == userCredentials.Email);
 
-            if (User is null || User.Password != userCredentials.Password)
+            if (User is null)
+                return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
+
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(userCredentials.Password, User.Password);
+
+            if (!isValidPassword)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
 
             var response = new UserResponse()
@@ -74,7 +83,6 @@ namespace Final_Project.Service
             return Result<UserResponse>.Success(StatusCodes.Status200OK, response);
 
         }
-
 
         public string GenerateJwtToken(Patient user)
         {

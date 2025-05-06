@@ -41,6 +41,7 @@ namespace Final_Project.Service
             if (specCheck is null)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidSpeciality });
 
+            string hashed = BCrypt.Net.BCrypt.HashPassword(docCredentials.Password);
 
             var user = new Doctor()
             {
@@ -48,7 +49,7 @@ namespace Final_Project.Service
                 LastName = docCredentials.LastName,
                 Email = docCredentials.Email,
                 Phone = docCredentials.Phone,
-                Password = docCredentials.Password,
+                Password = hashed,
                 SpecialityId = docCredentials.SpecialityId
             };
 
@@ -64,11 +65,17 @@ namespace Final_Project.Service
             return Result<UserResponse>.Success(StatusCodes.Status200OK, response);
 
         }
+
         public async Task<Result<UserResponse>> Login(UserLogin docCredentials)
         {
             var User = await _context.Doctors.FirstOrDefaultAsync(e => e.Email == docCredentials.Email);
 
-            if (User is null || User.Password != docCredentials.Password)
+            if (User is null)
+                return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
+
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(docCredentials.Password, User.Password);
+
+            if (!isValidPassword)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
 
             var response = new UserResponse()
@@ -78,8 +85,8 @@ namespace Final_Project.Service
             };
 
             return Result<UserResponse>.Success(StatusCodes.Status200OK, response);
-
         }
+
         public string GenerateJwtToken(Doctor user)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
