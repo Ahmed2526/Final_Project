@@ -18,7 +18,7 @@ namespace Final_Project
             // Add services to the container.
 
             // Get connection string from configuration
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString("LiveConnection");
 
             // Register DbContext with DI
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,6 +28,8 @@ namespace Final_Project
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddHttpContextAccessor();
 
             // 🔹 Configure JWT Authentication
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -79,6 +81,7 @@ namespace Final_Project
             // Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment())
 
+           // app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI();
 

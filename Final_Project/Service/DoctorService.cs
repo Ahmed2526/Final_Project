@@ -41,7 +41,7 @@ namespace Final_Project.Service
             if (specCheck is null)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidSpeciality });
 
-            string hashed = BCrypt.Net.BCrypt.HashPassword(docCredentials.Password);
+            //   string hashed = BCrypt.Net.BCrypt.HashPassword(docCredentials.Password);
 
             var user = new Doctor()
             {
@@ -49,7 +49,7 @@ namespace Final_Project.Service
                 LastName = docCredentials.LastName,
                 Email = docCredentials.Email,
                 Phone = docCredentials.Phone,
-                Password = hashed,
+                Password = docCredentials.Password,
                 SpecialityId = docCredentials.SpecialityId
             };
 
@@ -73,9 +73,9 @@ namespace Final_Project.Service
             if (User is null)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
 
-            bool isValidPassword = BCrypt.Net.BCrypt.Verify(docCredentials.Password, User.Password);
+            // bool isValidPassword = BCrypt.Net.BCrypt.Verify(docCredentials.Password, User.Password);
 
-            if (!isValidPassword)
+            if (User.Password != docCredentials.Password)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
 
             var response = new UserResponse()

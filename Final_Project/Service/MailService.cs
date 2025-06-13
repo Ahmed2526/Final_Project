@@ -42,5 +42,32 @@ namespace Final_Project.Service
             return response.IsSuccessStatusCode;
 
         }
+
+        public async Task<bool> SendResetEmailV02(string toEmail, string resetToken)
+        {
+            var apiKey = _config["SendGrid:ApiKey"];
+            var client = new SendGridClient(apiKey);
+
+            var SenderEmail = _config["MedLink:Email"];
+            var SenderName = _config["MedLink:Name"];
+
+            var from = new EmailAddress(SenderEmail, SenderName);
+            var to = new EmailAddress(toEmail);
+
+            // Read HTML template from file
+            var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "EmailTemplates", "ResetPasswordV02.html");
+            var htmlTemplate = await File.ReadAllTextAsync(templatePath);
+
+            // Inject the reset link
+            var htmlContent = htmlTemplate
+                .Replace("{{resetCode}}", resetToken);
+                
+
+            var msg = MailHelper.CreateSingleEmail(from, to, "Reset Your Password", null, htmlContent);
+            var response = await client.SendEmailAsync(msg);
+
+            return response.IsSuccessStatusCode;
+
+        }
     }
 }

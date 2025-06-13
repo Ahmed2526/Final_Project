@@ -2,6 +2,7 @@
 using DAL.Enums;
 using DAL.Models;
 using Final_Project.DTO;
+using Final_Project.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,11 @@ namespace Final_Project.Controllers
     public class PatientController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
-        public PatientController(ApplicationDbContext context)
+        private readonly IFileService _fileService;
+        public PatientController(ApplicationDbContext context, IFileService fileService)
         {
             _context = context;
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -266,6 +268,72 @@ namespace Final_Project.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
 
+            var user = await _context.Patients.FindAsync(userId);
+
+            if (user is null)
+                return NotFound();
+
+            var Uservm = new UserVM()
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Phone = user.Phone,
+                ProfilePic = user.ProfilePic
+            };
+
+            return Ok(Uservm);
+        }
+
+        [HttpPost]
+        [Route("EditUserProfile")]
+        public async Task<IActionResult> EditUserProfile(EditUserVM uservm)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var user = await _context.Patients.FindAsync(userId);
+            if (user is null)
+                return NotFound();
+
+            var PhoneExist = await _context.Patients
+                .Where(e => e.Phone == uservm.Phone && e.Id != userId)
+                .FirstOrDefaultAsync();
+
+            if (PhoneExist is not null)
+                return BadRequest("Phone Already Registered");
+
+
+            if (!string.IsNullOrEmpty(uservm.Name))
+                user.Name = uservm.Name;
+
+
+            if (!string.IsNullOrEmpty(uservm.Phone))
+                user.Phone = uservm.Phone;
+
+
+            //Handle Profile Pic
+            if (uservm.ProfilePic is not null && uservm.ProfilePic.Length > 0)
+            {
+                var (status, message, path) = await _fileService.HandleUserProfilePhoto(uservm.ProfilePic, user.ProfilePic);
+
+                if (!status)
+                    return BadRequest(message);
+
+                user.ProfilePic = path;
+            }
+
+            _context.Update(user);
+            _context.SaveChanges();
+
+            return Ok();
+        }
     }
 }

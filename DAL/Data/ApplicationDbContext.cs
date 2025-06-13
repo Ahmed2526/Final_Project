@@ -33,7 +33,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<DoctorAvailability> DoctorAvailabilities { get; set; }
     public DbSet<PasswordResetToken> passwordResetTokens { get; set; }
     public DbSet<Payment> Payments { get; set; }
-
-
+    public DbSet<Product> Products { get; set; }
 
 }

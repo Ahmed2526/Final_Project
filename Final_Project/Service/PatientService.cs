@@ -37,7 +37,7 @@ namespace Final_Project.Service
             if (userExist01)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.PhoneExist });
 
-            string hashed = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
+            // string hashed = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
 
             var user = new Patient()
             {
@@ -45,7 +45,7 @@ namespace Final_Project.Service
                 Email = userCredentials.Email,
                 BirthDate = userCredentials.BirthDate,
                 Phone = userCredentials.Phone,
-                Password = hashed
+                Password = userCredentials.Password
             };
 
 
@@ -69,9 +69,9 @@ namespace Final_Project.Service
             if (User is null)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
 
-            bool isValidPassword = BCrypt.Net.BCrypt.Verify(userCredentials.Password, User.Password);
+            //  bool isValidPassword = BCrypt.Net.BCrypt.Verify(userCredentials.Password, User.Password);
 
-            if (!isValidPassword)
+            if (User.Password != userCredentials.Password)
                 return Result<UserResponse>.Failure(StatusCodes.Status400BadRequest, new[] { UserError.InvalidCredentials });
 
             var response = new UserResponse()

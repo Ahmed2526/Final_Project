@@ -4,6 +4,7 @@ using Final_Project.DTO;
 using Final_Project.IService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace Final_Project.Controllers
 {
@@ -51,15 +52,45 @@ namespace Final_Project.Controllers
 
         }
 
+        #region RequestPasswordResetUserV01
+        //[HttpPost]
+        //[Route("User/request-reset")]
+        //public async Task<IActionResult> RequestPasswordReset(ResetRequestDto dto)
+        //{
+        //    var user = await _context.Patients.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        //    if (user == null)
+        //        return BadRequest("Email not found.");
+
+        //    var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+        //    var expiry = DateTime.UtcNow.AddHours(1).ToLocalTime();
+
+        //    var resetEntry = new PasswordResetToken
+        //    {
+        //        Email = dto.Email,
+        //        Token = token,
+        //        ExpiryDate = expiry
+        //    };
+
+        //    _context.passwordResetTokens.Add(resetEntry);
+        //    await _context.SaveChangesAsync();
+
+        //    var resetLink = $"{Request.Scheme}://{Request.Host}/auth/doc/reset-password?token={token}&email={dto.Email}";
+
+        //    var isSuccess = await _mailService.SendResetEmail(user.Email, resetLink);
+
+        //    return Ok(isSuccess);
+        //}
+        #endregion
+
         [HttpPost]
         [Route("User/request-reset")]
-        public async Task<IActionResult> RequestPasswordReset(ResetRequestDto dto)
+        public async Task<IActionResult> RequestPasswordResetUserV02(ResetRequestDto dto)
         {
             var user = await _context.Patients.FirstOrDefaultAsync(u => u.Email == dto.Email);
             if (user == null)
                 return BadRequest("Email not found.");
 
-            var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            string token = GenerateSecureSixDigitNumber().ToString();
             var expiry = DateTime.UtcNow.AddHours(1).ToLocalTime();
 
             var resetEntry = new PasswordResetToken
@@ -72,9 +103,9 @@ namespace Final_Project.Controllers
             _context.passwordResetTokens.Add(resetEntry);
             await _context.SaveChangesAsync();
 
-            var resetLink = $"{Request.Scheme}://{Request.Host}/auth/doc/reset-password?token={token}&email={dto.Email}";
+            var resetToken = $"{resetEntry.Token}";
 
-            var isSuccess = await _mailService.SendResetEmail(user.Email, resetLink);
+            var isSuccess = await _mailService.SendResetEmailV02(user.Email, resetToken);
 
             return Ok(isSuccess);
         }
@@ -93,6 +124,8 @@ namespace Final_Project.Controllers
             if (user == null)
                 return NotFound("User not found.");
 
+            //string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
             user.Password = dto.Password;
             _context.Patients.Update(user);
 
@@ -102,8 +135,6 @@ namespace Final_Project.Controllers
 
             return Ok("Password has been reset successfully.");
         }
-
-
 
         [HttpPost]
         [Route("doc/SignUp")]
@@ -131,16 +162,45 @@ namespace Final_Project.Controllers
 
         }
 
+        #region RequestPasswordResetDocV01
+        //[HttpPost]
+        //[Route("doc/request-reset")]
+        //public async Task<IActionResult> RequestPasswordResetDoc(ResetRequestDto dto)
+        //{
+        //    var user = await _context.Doctors.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        //    if (user == null)
+        //        return BadRequest("Email not found.");
+
+        //    var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+        //    var expiry = DateTime.UtcNow.AddHours(1).ToLocalTime();
+
+        //    var resetEntry = new PasswordResetToken
+        //    {
+        //        Email = dto.Email,
+        //        Token = token,
+        //        ExpiryDate = expiry
+        //    };
+
+        //    _context.passwordResetTokens.Add(resetEntry);
+        //    await _context.SaveChangesAsync();
+
+        //    var resetLink = $"{Request.Scheme}://{Request.Host}/auth/doc/reset-password?token={token}&email={dto.Email}";
+
+        //    var isSuccess =await _mailService.SendResetEmail(user.Email, resetLink);
+
+        //    return Ok(isSuccess);
+        //}
+        #endregion
 
         [HttpPost]
         [Route("doc/request-reset")]
-        public async Task<IActionResult> RequestPasswordResetDoc(ResetRequestDto dto)
+        public async Task<IActionResult> RequestPasswordResetDocV02(ResetRequestDto dto)
         {
             var user = await _context.Doctors.FirstOrDefaultAsync(u => u.Email == dto.Email);
             if (user == null)
                 return BadRequest("Email not found.");
 
-            var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            string token = GenerateSecureSixDigitNumber().ToString();
             var expiry = DateTime.UtcNow.AddHours(1).ToLocalTime();
 
             var resetEntry = new PasswordResetToken
@@ -153,13 +213,12 @@ namespace Final_Project.Controllers
             _context.passwordResetTokens.Add(resetEntry);
             await _context.SaveChangesAsync();
 
-            var resetLink = $"{Request.Scheme}://{Request.Host}/auth/doc/reset-password?token={token}&email={dto.Email}";
+            var resetToken = $"{resetEntry.Token}";
 
-            var isSuccess =await _mailService.SendResetEmail(user.Email, resetLink);
+            var isSuccess = await _mailService.SendResetEmailV02(user.Email, resetToken);
 
             return Ok(isSuccess);
         }
-
 
         [HttpPost]
         [Route("doc/reset-password")]
@@ -175,6 +234,7 @@ namespace Final_Project.Controllers
             if (user == null)
                 return NotFound("User not found.");
 
+            // string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             user.Password = dto.Password;
             _context.Doctors.Update(user);
 
@@ -185,6 +245,13 @@ namespace Final_Project.Controllers
             return Ok("Password has been reset successfully.");
         }
 
-
+        public static int GenerateSecureSixDigitNumber()
+        {
+            byte[] bytes = new byte[4];
+            RandomNumberGenerator.Fill(bytes);
+            int value = BitConverter.ToInt32(bytes, 0);
+            value = Math.Abs(value % 900000) + 100000;
+            return value;
+        }
     }
 }
