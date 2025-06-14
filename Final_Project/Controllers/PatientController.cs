@@ -18,10 +18,12 @@ namespace Final_Project.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
-        public PatientController(ApplicationDbContext context, IFileService fileService)
+        private readonly IMailService _mailService;
+        public PatientController(ApplicationDbContext context, IFileService fileService, IMailService mailService)
         {
             _context = context;
             _fileService = fileService;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -169,7 +171,6 @@ namespace Final_Project.Controllers
             return Ok(data);
         }
 
-
         [HttpPost]
         [Route("BookAppointment")]
         public async Task<IActionResult> Book(AppointmentRequest request)
@@ -180,6 +181,10 @@ namespace Final_Project.Controllers
 
             var checkclinic = await _context.Clinics
                 .Where(e => e.DoctorId == request.DoctorId && e.Id == request.ClinicId)
+                .Include(e => e.Location)
+                .ThenInclude(e => e.Governate)
+                .Include(e => e.Location)
+                .ThenInclude(e => e.City)
                 .FirstOrDefaultAsync();
 
             if (checkclinic is null)
@@ -200,7 +205,25 @@ namespace Final_Project.Controllers
             await _context.AddAsync(appointment);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            //Send Confirmation SMS
+            var user = _context.Patients.Find(userId);
+
+            string SMSBody = $"Hello {user!.Name}, your appointment has been successfully booked for {appointment.Day}, {appointment.AppointmentStart} " +
+                 $"Location: {checkclinic.Location}. Please arrive 10 minutes early. Thank you!";
+
+            SmsRequest smsRequest = new SmsRequest()
+            {
+                ToPhoneNumber = "+201027511628",
+                Message = SMSBody
+            };
+
+           // var status = _mailService.SendConfirmBookingSMS(smsRequest);
+
+            //Send Confirmation Email
+            var appInfo = new AppointmentEmailInfo(user.Name, appointment.Day, appointment.AppointmentStart, checkclinic.Location);
+            var emailStatus = await _mailService.SendAppointmentConfirmationEmail(user.Email, appInfo);
+
+            return Ok(emailStatus);
         }
 
         [HttpGet]
