@@ -223,7 +223,7 @@ namespace Final_Project.Controllers
             var appInfo = new AppointmentEmailInfo(user.Name, appointment.Day, appointment.AppointmentStart, checkclinic.Location);
             var emailStatus = await _mailService.SendAppointmentConfirmationEmail(user.Email, appInfo);
 
-            return Ok(emailStatus);
+            return NoContent();
         }
 
         [HttpGet]

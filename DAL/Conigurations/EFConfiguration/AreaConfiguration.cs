@@ -17,7 +17,7 @@ namespace DAL.Conigurations.EFConfiguration
            new City { Id = 5, Name = "الهرم", GovernateId = 1 },
            new City { Id = 6, Name = "العباسية", GovernateId = 1 },
            new City { Id = 7, Name = "الجيزة", GovernateId = 1 },
-
+           
            // Giza
            new City { Id = 8, Name = "الهرم", GovernateId = 2 },
            new City { Id = 9, Name = "الدقي", GovernateId = 2 },

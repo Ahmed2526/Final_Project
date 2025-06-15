@@ -4,6 +4,7 @@ using DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250615013116_AddedSomeSeedData")]
+    partial class AddedSomeSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -378,308 +381,6 @@ namespace DAL.Migrations
                     b.HasIndex("SpecialityId");
 
                     b.ToTable("Clinics");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DoctorId = 1,
-                            LocationId = 1,
-                            Name = "Heart Care Clinic",
-                            Phone = "01010010001",
-                            Price = 500m,
-                            SpecialityId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DoctorId = 2,
-                            LocationId = 2,
-                            Name = "Kids Health Clinic",
-                            Phone = "01010010002",
-                            Price = 350m,
-                            SpecialityId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DoctorId = 3,
-                            LocationId = 3,
-                            Name = "Surgical Center",
-                            Phone = "01010010003",
-                            Price = 600m,
-                            SpecialityId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DoctorId = 4,
-                            LocationId = 4,
-                            Name = "Skin Wellness Clinic",
-                            Phone = "01010010004",
-                            Price = 400m,
-                            SpecialityId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            DoctorId = 5,
-                            LocationId = 5,
-                            Name = "Neuro Center",
-                            Phone = "01010010005",
-                            Price = 550m,
-                            SpecialityId = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            DoctorId = 6,
-                            LocationId = 6,
-                            Name = "Women's Health Clinic",
-                            Phone = "01010010006",
-                            Price = 500m,
-                            SpecialityId = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            DoctorId = 7,
-                            LocationId = 7,
-                            Name = "Ortho Move Clinic",
-                            Phone = "01010010007",
-                            Price = 340m,
-                            SpecialityId = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            DoctorId = 8,
-                            LocationId = 8,
-                            Name = "Chronic Care Clinic",
-                            Phone = "01010010008",
-                            Price = 300m,
-                            SpecialityId = 8
-                        },
-                        new
-                        {
-                            Id = 9,
-                            DoctorId = 9,
-                            LocationId = 9,
-                            Name = "Mind Matters Clinic",
-                            Phone = "01010010009",
-                            Price = 450m,
-                            SpecialityId = 9
-                        },
-                        new
-                        {
-                            Id = 10,
-                            DoctorId = 10,
-                            LocationId = 10,
-                            Name = "Vision Center",
-                            Phone = "01010010010",
-                            Price = 500m,
-                            SpecialityId = 10
-                        },
-                        new
-                        {
-                            Id = 11,
-                            DoctorId = 11,
-                            LocationId = 11,
-                            Name = "ENT Specialists",
-                            Phone = "01010010011",
-                            Price = 400m,
-                            SpecialityId = 11
-                        },
-                        new
-                        {
-                            Id = 12,
-                            DoctorId = 12,
-                            LocationId = 12,
-                            Name = "Pathology Lab",
-                            Phone = "01010010012",
-                            Price = 300m,
-                            SpecialityId = 12
-                        },
-                        new
-                        {
-                            Id = 13,
-                            DoctorId = 13,
-                            LocationId = 13,
-                            Name = "Endocrine Experts",
-                            Phone = "01010010013",
-                            Price = 450m,
-                            SpecialityId = 13
-                        },
-                        new
-                        {
-                            Id = 14,
-                            DoctorId = 14,
-                            LocationId = 14,
-                            Name = "Autoimmune Center",
-                            Phone = "01010010014",
-                            Price = 470m,
-                            SpecialityId = 14
-                        },
-                        new
-                        {
-                            Id = 15,
-                            DoctorId = 15,
-                            LocationId = 15,
-                            Name = "Kidney Care Clinic",
-                            Phone = "01010010015",
-                            Price = 480m,
-                            SpecialityId = 15
-                        },
-                        new
-                        {
-                            Id = 16,
-                            DoctorId = 16,
-                            LocationId = 16,
-                            Name = "Blood Center",
-                            Phone = "01010010016",
-                            Price = 500m,
-                            SpecialityId = 16
-                        },
-                        new
-                        {
-                            Id = 17,
-                            DoctorId = 17,
-                            LocationId = 17,
-                            Name = "Digestive Health Clinic",
-                            Phone = "01010010017",
-                            Price = 460m,
-                            SpecialityId = 17
-                        },
-                        new
-                        {
-                            Id = 18,
-                            DoctorId = 18,
-                            LocationId = 18,
-                            Name = "Family Health Clinic",
-                            Phone = "01010010018",
-                            Price = 350m,
-                            SpecialityId = 18
-                        },
-                        new
-                        {
-                            Id = 19,
-                            DoctorId = 19,
-                            LocationId = 19,
-                            Name = "Lung & Breathing Clinic",
-                            Phone = "01010010019",
-                            Price = 430m,
-                            SpecialityId = 19
-                        },
-                        new
-                        {
-                            Id = 20,
-                            DoctorId = 20,
-                            LocationId = 20,
-                            Name = "Cancer Treatment Center",
-                            Phone = "01010010020",
-                            Price = 400m,
-                            SpecialityId = 20
-                        },
-                        new
-                        {
-                            Id = 21,
-                            DoctorId = 21,
-                            LocationId = 21,
-                            Name = "Imaging Center",
-                            Phone = "01010010021",
-                            Price = 300m,
-                            SpecialityId = 21
-                        },
-                        new
-                        {
-                            Id = 22,
-                            DoctorId = 22,
-                            LocationId = 22,
-                            Name = "Anesthesia Services",
-                            Phone = "01010010022",
-                            Price = 200m,
-                            SpecialityId = 22
-                        },
-                        new
-                        {
-                            Id = 23,
-                            DoctorId = 23,
-                            LocationId = 23,
-                            Name = "Smile Dental Clinic",
-                            Phone = "01010010023",
-                            Price = 400m,
-                            SpecialityId = 23
-                        },
-                        new
-                        {
-                            Id = 24,
-                            DoctorId = 24,
-                            LocationId = 24,
-                            Name = "Uro Care Center",
-                            Phone = "01010010024",
-                            Price = 380m,
-                            SpecialityId = 24
-                        },
-                        new
-                        {
-                            Id = 25,
-                            DoctorId = 25,
-                            LocationId = 25,
-                            Name = "Beauty & Reconstruction",
-                            Phone = "01010010025",
-                            Price = 750m,
-                            SpecialityId = 25
-                        },
-                        new
-                        {
-                            Id = 26,
-                            DoctorId = 26,
-                            LocationId = 26,
-                            Name = "Vascular Solutions",
-                            Phone = "01010010026",
-                            Price = 350m,
-                            SpecialityId = 26
-                        },
-                        new
-                        {
-                            Id = 27,
-                            DoctorId = 27,
-                            LocationId = 27,
-                            Name = "Fertility Center",
-                            Phone = "01010010027",
-                            Price = 450m,
-                            SpecialityId = 27
-                        },
-                        new
-                        {
-                            Id = 28,
-                            DoctorId = 28,
-                            LocationId = 28,
-                            Name = "Neighborhood GP Clinic",
-                            Phone = "01010010028",
-                            Price = 300m,
-                            SpecialityId = 5
-                        },
-                        new
-                        {
-                            Id = 29,
-                            DoctorId = 29,
-                            LocationId = 29,
-                            Name = "Little Stars Pediatrics",
-                            Phone = "01010010029",
-                            Price = 370m,
-                            SpecialityId = 6
-                        },
-                        new
-                        {
-                            Id = 30,
-                            DoctorId = 30,
-                            LocationId = 30,
-                            Name = "Critical Care Hub",
-                            Phone = "01010010030",
-                            Price = 320m,
-                            SpecialityId = 7
-                        });
                 });
 
             modelBuilder.Entity("DAL.Models.Doctor", b =>
@@ -1133,278 +834,6 @@ namespace DAL.Migrations
                     b.HasIndex("DoctorId");
 
                     b.ToTable("DoctorAvailabilities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AppointmentEnd = new TimeOnly(17, 0, 0),
-                            AppointmentStart = new TimeOnly(9, 0, 0),
-                            ClinicId = 1,
-                            Day = "Monday",
-                            DoctorId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AppointmentEnd = new TimeOnly(18, 0, 0),
-                            AppointmentStart = new TimeOnly(10, 0, 0),
-                            ClinicId = 2,
-                            Day = "Tuesday",
-                            DoctorId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AppointmentEnd = new TimeOnly(16, 30, 0),
-                            AppointmentStart = new TimeOnly(8, 30, 0),
-                            ClinicId = 3,
-                            Day = "Wednesday",
-                            DoctorId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AppointmentEnd = new TimeOnly(19, 0, 0),
-                            AppointmentStart = new TimeOnly(11, 0, 0),
-                            ClinicId = 4,
-                            Day = "Thursday",
-                            DoctorId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AppointmentEnd = new TimeOnly(15, 0, 0),
-                            AppointmentStart = new TimeOnly(9, 0, 0),
-                            ClinicId = 5,
-                            Day = "Friday",
-                            DoctorId = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AppointmentEnd = new TimeOnly(17, 0, 0),
-                            AppointmentStart = new TimeOnly(10, 0, 0),
-                            ClinicId = 6,
-                            Day = "Saturday",
-                            DoctorId = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AppointmentEnd = new TimeOnly(20, 0, 0),
-                            AppointmentStart = new TimeOnly(12, 0, 0),
-                            ClinicId = 7,
-                            Day = "Sunday",
-                            DoctorId = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AppointmentEnd = new TimeOnly(17, 30, 0),
-                            AppointmentStart = new TimeOnly(9, 30, 0),
-                            ClinicId = 8,
-                            Day = "Monday",
-                            DoctorId = 8
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AppointmentEnd = new TimeOnly(18, 30, 0),
-                            AppointmentStart = new TimeOnly(10, 30, 0),
-                            ClinicId = 9,
-                            Day = "Tuesday",
-                            DoctorId = 9
-                        },
-                        new
-                        {
-                            Id = 10,
-                            AppointmentEnd = new TimeOnly(14, 0, 0),
-                            AppointmentStart = new TimeOnly(8, 0, 0),
-                            ClinicId = 10,
-                            Day = "Wednesday",
-                            DoctorId = 10
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AppointmentEnd = new TimeOnly(21, 0, 0),
-                            AppointmentStart = new TimeOnly(13, 0, 0),
-                            ClinicId = 11,
-                            Day = "Thursday",
-                            DoctorId = 11
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AppointmentEnd = new TimeOnly(13, 0, 0),
-                            AppointmentStart = new TimeOnly(9, 0, 0),
-                            ClinicId = 12,
-                            Day = "Friday",
-                            DoctorId = 12
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AppointmentEnd = new TimeOnly(16, 0, 0),
-                            AppointmentStart = new TimeOnly(10, 0, 0),
-                            ClinicId = 13,
-                            Day = "Saturday",
-                            DoctorId = 13
-                        },
-                        new
-                        {
-                            Id = 14,
-                            AppointmentEnd = new TimeOnly(19, 0, 0),
-                            AppointmentStart = new TimeOnly(11, 0, 0),
-                            ClinicId = 14,
-                            Day = "Sunday",
-                            DoctorId = 14
-                        },
-                        new
-                        {
-                            Id = 15,
-                            AppointmentEnd = new TimeOnly(15, 30, 0),
-                            AppointmentStart = new TimeOnly(8, 30, 0),
-                            ClinicId = 15,
-                            Day = "Monday",
-                            DoctorId = 15
-                        },
-                        new
-                        {
-                            Id = 16,
-                            AppointmentEnd = new TimeOnly(17, 30, 0),
-                            AppointmentStart = new TimeOnly(9, 30, 0),
-                            ClinicId = 16,
-                            Day = "Tuesday",
-                            DoctorId = 16
-                        },
-                        new
-                        {
-                            Id = 17,
-                            AppointmentEnd = new TimeOnly(18, 0, 0),
-                            AppointmentStart = new TimeOnly(10, 0, 0),
-                            ClinicId = 17,
-                            Day = "Wednesday",
-                            DoctorId = 17
-                        },
-                        new
-                        {
-                            Id = 18,
-                            AppointmentEnd = new TimeOnly(20, 0, 0),
-                            AppointmentStart = new TimeOnly(12, 0, 0),
-                            ClinicId = 18,
-                            Day = "Thursday",
-                            DoctorId = 18
-                        },
-                        new
-                        {
-                            Id = 19,
-                            AppointmentEnd = new TimeOnly(14, 0, 0),
-                            AppointmentStart = new TimeOnly(9, 0, 0),
-                            ClinicId = 19,
-                            Day = "Friday",
-                            DoctorId = 19
-                        },
-                        new
-                        {
-                            Id = 20,
-                            AppointmentEnd = new TimeOnly(19, 0, 0),
-                            AppointmentStart = new TimeOnly(11, 0, 0),
-                            ClinicId = 20,
-                            Day = "Saturday",
-                            DoctorId = 20
-                        },
-                        new
-                        {
-                            Id = 21,
-                            AppointmentEnd = new TimeOnly(16, 0, 0),
-                            AppointmentStart = new TimeOnly(10, 0, 0),
-                            ClinicId = 21,
-                            Day = "Sunday",
-                            DoctorId = 21
-                        },
-                        new
-                        {
-                            Id = 22,
-                            AppointmentEnd = new TimeOnly(15, 0, 0),
-                            AppointmentStart = new TimeOnly(8, 0, 0),
-                            ClinicId = 22,
-                            Day = "Monday",
-                            DoctorId = 22
-                        },
-                        new
-                        {
-                            Id = 23,
-                            AppointmentEnd = new TimeOnly(17, 0, 0),
-                            AppointmentStart = new TimeOnly(9, 0, 0),
-                            ClinicId = 23,
-                            Day = "Tuesday",
-                            DoctorId = 23
-                        },
-                        new
-                        {
-                            Id = 24,
-                            AppointmentEnd = new TimeOnly(21, 0, 0),
-                            AppointmentStart = new TimeOnly(13, 0, 0),
-                            ClinicId = 24,
-                            Day = "Wednesday",
-                            DoctorId = 24
-                        },
-                        new
-                        {
-                            Id = 25,
-                            AppointmentEnd = new TimeOnly(18, 30, 0),
-                            AppointmentStart = new TimeOnly(10, 30, 0),
-                            ClinicId = 25,
-                            Day = "Thursday",
-                            DoctorId = 25
-                        },
-                        new
-                        {
-                            Id = 26,
-                            AppointmentEnd = new TimeOnly(14, 30, 0),
-                            AppointmentStart = new TimeOnly(8, 30, 0),
-                            ClinicId = 26,
-                            Day = "Friday",
-                            DoctorId = 26
-                        },
-                        new
-                        {
-                            Id = 27,
-                            AppointmentEnd = new TimeOnly(17, 0, 0),
-                            AppointmentStart = new TimeOnly(9, 0, 0),
-                            ClinicId = 27,
-                            Day = "Saturday",
-                            DoctorId = 27
-                        },
-                        new
-                        {
-                            Id = 28,
-                            AppointmentEnd = new TimeOnly(18, 0, 0),
-                            AppointmentStart = new TimeOnly(12, 0, 0),
-                            ClinicId = 28,
-                            Day = "Sunday",
-                            DoctorId = 28
-                        },
-                        new
-                        {
-                            Id = 29,
-                            AppointmentEnd = new TimeOnly(19, 0, 0),
-                            AppointmentStart = new TimeOnly(11, 0, 0),
-                            ClinicId = 29,
-                            Day = "Monday",
-                            DoctorId = 29
-                        },
-                        new
-                        {
-                            Id = 30,
-                            AppointmentEnd = new TimeOnly(16, 0, 0),
-                            AppointmentStart = new TimeOnly(10, 0, 0),
-                            ClinicId = 30,
-                            Day = "Tuesday",
-                            DoctorId = 30
-                        });
                 });
 
             modelBuilder.Entity("DAL.Models.Governate", b =>
@@ -1599,6 +1028,30 @@ namespace DAL.Migrations
                             GovernateId = 1,
                             PostalCode = "10023",
                             Street = "45 Talaat Harb St."
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CityId = 2,
+                            GovernateId = 1,
+                            PostalCode = "12753",
+                            Street = "70 Ramses St."
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CityId = 3,
+                            GovernateId = 1,
+                            PostalCode = "12819",
+                            Street = "97 Gomhoria St."
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CityId = 8,
+                            GovernateId = 2,
+                            PostalCode = "12902",
+                            Street = "22 Port Said St."
                         },
                         new
                         {
@@ -1807,30 +1260,6 @@ namespace DAL.Migrations
                             GovernateId = 8,
                             PostalCode = "12644",
                             Street = "17 Al Montazah St."
-                        },
-                        new
-                        {
-                            Id = 28,
-                            CityId = 2,
-                            GovernateId = 1,
-                            PostalCode = "12753",
-                            Street = "70 Ramses St."
-                        },
-                        new
-                        {
-                            Id = 29,
-                            CityId = 3,
-                            GovernateId = 1,
-                            PostalCode = "12819",
-                            Street = "97 Gomhoria St."
-                        },
-                        new
-                        {
-                            Id = 30,
-                            CityId = 8,
-                            GovernateId = 2,
-                            PostalCode = "12902",
-                            Street = "22 Port Said St."
                         });
                 });
 
