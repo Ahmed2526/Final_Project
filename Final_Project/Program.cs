@@ -65,12 +65,19 @@ namespace Final_Project
                 });
             });
 
+            // 🧾 Set license
+            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
             //Custom Services
             builder.Services.AddScoped<IPatientService, PatientService>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<ISpecialityService, SpecialityService>();
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IMailService, MailService>();
+
+            builder.Services.AddTransient<PdfReportGenerator>();
+            builder.Services.AddTransient<CsvReportGenerator>();
+            builder.Services.AddTransient<IReportFactory, ReportFactory>();
 
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();

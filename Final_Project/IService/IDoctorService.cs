@@ -7,5 +7,7 @@ namespace Final_Project.IService
     {
         Task<Result<UserResponse>> Login(UserLogin docCredentials);
         Task<Result<UserResponse>> Register(DoctorRegister docCredentials);
+
+        Task<List<DocReport>> DocReportVM();
     }
 }

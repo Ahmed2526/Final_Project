@@ -82,33 +82,7 @@ namespace Final_Project.Controllers
         //}
         #endregion
 
-        [HttpPost]
-        [Route("User/request-reset")]
-        public async Task<IActionResult> RequestPasswordResetUserV02(ResetRequestDto dto)
-        {
-            var user = await _context.Patients.FirstOrDefaultAsync(u => u.Email == dto.Email);
-            if (user == null)
-                return BadRequest("Email not found.");
-
-            string token = GenerateSecureSixDigitNumber().ToString();
-            var expiry = DateTime.UtcNow.AddHours(1).ToLocalTime();
-
-            var resetEntry = new PasswordResetToken
-            {
-                Email = dto.Email,
-                Token = token,
-                ExpiryDate = expiry
-            };
-
-            _context.passwordResetTokens.Add(resetEntry);
-            await _context.SaveChangesAsync();
-
-            var resetToken = $"{resetEntry.Token}";
-
-            var isSuccess = await _mailService.SendResetEmailV02(user.Email, resetToken);
-
-            return Ok(isSuccess);
-        }
+        
 
         [HttpPost]
         [Route("User/reset-password")]
@@ -193,6 +167,34 @@ namespace Final_Project.Controllers
         #endregion
 
         [HttpPost]
+        [Route("User/request-reset")]
+        public async Task<IActionResult> RequestPasswordResetUserV02(ResetRequestDto dto)
+        {
+            var user = await _context.Patients.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (user == null)
+                return BadRequest("Email not found.");
+
+            string token = GenerateSecureSixDigitNumber().ToString();
+            var expiry = DateTime.UtcNow.AddHours(1).ToLocalTime();
+
+            var resetEntry = new PasswordResetToken
+            {
+                Email = dto.Email,
+                Token = token,
+                ExpiryDate = expiry
+            };
+
+            _context.passwordResetTokens.Add(resetEntry);
+            await _context.SaveChangesAsync();
+
+            var resetToken = resetEntry.Token;
+
+            var isSuccess = await _mailService.SendResetEmailV02(user.Email, resetToken);
+
+            return Ok(isSuccess);
+        }
+
+        [HttpPost]
         [Route("doc/request-reset")]
         public async Task<IActionResult> RequestPasswordResetDocV02(ResetRequestDto dto)
         {
@@ -213,7 +215,7 @@ namespace Final_Project.Controllers
             _context.passwordResetTokens.Add(resetEntry);
             await _context.SaveChangesAsync();
 
-            var resetToken = $"{resetEntry.Token}";
+            var resetToken = resetEntry.Token;
 
             var isSuccess = await _mailService.SendResetEmailV02(user.Email, resetToken);
 

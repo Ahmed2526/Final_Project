@@ -112,5 +112,21 @@ namespace Final_Project.Service
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<List<DocReport>> DocReportVM()
+        {
+            var data = await _context.Doctors.Include(e => e.Speciality)
+                .Select(e => new DocReport
+                {
+                    Id = e.Id,
+                    Name = e.FirstName + " " + e.LastName,
+                    Email = e.Email,
+                    Phone = e.Phone,
+                    Rate = e.Rate,
+                    Speciality = e.Speciality.Name ?? "NA"
+                }).ToListAsync();
+
+            return data;
+        }
     }
 }
